@@ -228,8 +228,8 @@ https://www.google.de/search?q=best+quality+of+life+jobs
   - contribute to open source
   - competitions (Kaggle)
   - hackathons
-  - dont be afraid to program
-  - be spectical towards bootcamps
+  - don't be afraid to program
+  - be sceptical towards boot-camps
   - join local communities
   
 # Communication
@@ -241,7 +241,7 @@ https://www.google.de/search?q=best+quality+of+life+jobs
   
 ## How to provide data to data scientists
   - Data should be as raw as possible
-  - Additionaly provide a **tidy data** set or a rule book, how to clean it
+  - Additionally provide a **tidy data** set or a rule book, how to clean it
   - Name and explain every variable
 
 ## The raw data
@@ -322,18 +322,281 @@ Which set of file(name)s do you want at 3a.m. before a deadline?
 
 # Tidy data
 
+## Introduction
+> "Happy families are all alike; every unhappy family is unhappy in its
+> own way." -- Leo Tolstoy
+
+> "Tidy datasets are all alike, but every messy dataset is messy in its
+> own way." -- Hadley Wickham
+
+## Easy rules
+1.  Each variable must have its own column.
+1.  Each observation must have its own row.
+1.  Each value must have its own cell.
+
+## Tidy data - gathering
+![](tidy-gather.png){height=600px}
+
+## Tidy data - spreading
+![](tidy-spread.png){height=600px}
+
+## Tidy data - uniting
+![](tidy-unite.png){height=600px}
+
+## Tidy data - separating
+![](tidy-separate.png){height=600px}
+
+
+# SQL Tutorial
+## Introduction
+From Wikipedia
+
+>SQL (pron. S-Q-L or "sequel"; Structured Query Language) is a domain-specific language used in programming and designed for managing data held in a **relational** database management system (RDBMS), or for stream processing in a relational data stream management system (RDSMS). It is particularly useful in handling **structured data** where there are relations between different entities/variables of the data.
+
+## Database
+  - central, structured storage of data
+  - provides a query language to CRUD (create, read, update, delete) data
+  - originally for organizational / productional purposes (many data updates)
+  - new use case: data analysis (time series database)
+  - common architecture: 
+    productional database →  ETL → analysis database
+  - ideally provides ACID properties
+  
+## ACID
+## ACID: Atomicity
+
+Transactions are often composed of multiple statements. Atomicity guarantees that each transaction is treated as a single "unit", which either succeeds completely, or fails completely: if any of the statements constituting a transaction fails to complete, the entire transaction fails and the database is left unchanged. An atomic system must guarantee atomicity in each and every situation, including power failures, errors and crashes.
+
+*Example of failure*: Transferring money from Account A to B
+
+## ACID: Consistency
+
+Consistency ensures that a transaction can only bring the database from one valid state to another, maintaining database invariants: any data written to the database must be valid according to all defined rules, including constraints, cascades, triggers, and any combination thereof. This prevents database corruption by an illegal transactions, but does not guarantee that a transaction is correct.
+
+## ACID: Isolation
+
+Transactions are often executed concurrently (eg. reading and writing to multiple tables at the same time). Isolation ensures that concurrent execution of transactions leaves the database in the same state that would've been obtained if the transactions were executed sequentially. Isolation is the main goal of concurrency control; depending on the method used, the effects of an incomplete transaction might not even be visible to other transactions.
+
+*Example of failure*: Transferring money from A to B and B to A in a parallel manner (write-write error)
+
+## ACID: Durability
+
+Durability guarantees that once a transaction has been committed, it will remain committed even in the case of a system failure (eg. power outage or crash). This usually means that completed transactions (or their effects) are recorded in non-volatile memory.
+  
+## Relational Database
+
+  - there are many approaches to databases
+  - most popular: relational
+  - collection of relations (tables) with keys
+  - normalization of data to prevent manipulation anomalies and loss of data integrity (will get clearer later)
+  - ACID principles
+  - multi user management (permissions, views, ...)
+  
+## SQL: CRUD basics → CREATE
+```sql
+CREATE TABLE table_name AS
+query_from_another_table
+```
+
+```sql
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    column3 datatype,
+   ....
+);
+```
+
+*Example*
+```sql
+CREATE TABLE Persons (
+    PersonID int,
+    LastName varchar(255),
+    FirstName varchar(255),
+    Address varchar(255),
+    City varchar(255) 
+);
+```
+
+## SQL: CRUD basics → READ
+```sql
+SELECT columns/mutations/aggregations AS new name
+FROM table/view/subselect [(LEFT/RIGHT/FULL OUTER) JOIN table/view/subselect]
+WHERE condition (AND filter condition, AND filter condition, ....)
+GROUP BY columns
+HAVING condition
+ORDER BY column DESC/ASC
+```
+
+  - Live coding
+
+## SQL: CRUD basics → READ cont.
+  
+  - Common `SELECT` calculations: `LENGTH`, `ABS`, `+-*/`
+  - Common `SELECT` aggregations: `SUM`, `COUNT`, `DISTINCT`, `MAX`, `MEAN`
+  
+  - Common conditions : `==`, `>`, `<`, `LIKE`, `IN`
+
+## SQL: CRUD basics → UPDATE
+```sql
+UPDATE table_name
+SET column1 = value1, column2 = value2...., columnN = valueN
+WHERE condition;
+```
+
+## SQL: CRUD basics → DELETE
+```sql 
+DROP TABLE table_name [CASCADE]
+```
+```sql
+DELETE FROM table_name
+WHERE condition;
+```
+
+## SQL: Grouping
+
+- Data aggregations can be made by sub-groups
+- Need to mention group in `SELECT` and `GROUP BY`
+- Only can `SELECT` groups and their aggregations
+- `HAVING` is analog to `WHERE` but for filtering after grouping
+- →  that makes  `HAVING` replaceable by `WHERE` in sub-queries
+- sub-queries: treat "result" tables as "source" tables and nest your analysis
+
+## SQL: (INNER) JOIN
+Use table relationships by joining them.
+
+![](join-setup.png){height=200px} ![](join-setup2.png){height=200px} 
+![](join-inner.png){height=300px}
+
+## SQL: OUTER JOINS
+![](join-outer.png){height=600px}
+
+## SQL: DUPLICATE KEYS
+![](join-one-to-many.png){height=200px} ![](join-many-to-many.png){height=300px}
+
+## SQL: JOINS
+![](join-venn.png)
+
+## Interactive session
+  - team up in teams of 3-4
+  - think of a non trivial (at least `JOIN` *AND* 1 `GROUP BY`) question
+  - write a SQL query that answers your question
+  - explain what you did to the rest of the class
+
+# Big Data
+## Motivation
+  - growth of data, storage capacity
+  - + decrease in processing costs
+  - = big data
+  
+## When is data big?
+  - no official consensus
+  - most common understanding: if data does not fit in RAM
+
+## What is so magical about it?
+  - nothing
+  - nothing changes for the analyst
+  
+## Map Reduce
+![](mapreduce.png){height=200px}
+- distribute calculations to many shards (servers)
+- calculate the aggregated results
+
+## Infamous 3 Vs of Big Data
+  - **V**olume: The amount of data points / size in storage units (e.g. TB)
+  - **V**elocity: The speed of data flow: size per time interval → batch vs. real-time
+  - **V**ariety: Unstructured data, media data, amount of variables
+
+## Extension to 7 Vs
+  - **V**ariablity, **Veracity**, **V**alidity: What does it take to clean the data and test it, how was the data collected, send, encrypted, pre-aggregated...?
+  - **V**alue: What analysis can be done on data, how much value does it add to the stakeholders?
+  - **Vulnerability**: How safe is the data against attacks (network- and database security)
+  - **V**olatility: How long can I keep the data? How long is it valuable?
+
+## So why the big deal?
+- I don't know, successful marketing maybe
+- Engineering was difficult 5 years ago, now everything easy, under the hood and on-demand
 
 # Vizualisations
+## Intro to vizualisations
+Great presentation can be found here: 
+http://www.informationisbeautiful.net/visualizations/worlds-biggest-data-breaches-hacks/
 
+## Vizualisation: additional thought
+- One story per chart!
+- What is the link to Big Data Vs: Volume, Velocity, Variety?
 
+## Interactive part
+Search online for bad visualizations, present why it is bad and outline a better solution.
+My take:
+![](bad-chart.png){height=400px}
 
+## Interactive Charts and Dashboard
+- static vs. dynamic HTML
+- Example: http://rhythm-of-food.net/
+- Example: http://selfiecity.net/
+- Example: [VBB Live Map](http://fahrinfo.vbb.de/bin/help.exe/dn?L=vs_mobilitymap&tpl=fullmap&tabApp=show)
 
-# SQl Tutorial
 # How to spread shit with spreadsheets
-# Big Data
-# Privacy
+## My favorite conference talk
+[Follow the rabbit hole](https://docs.google.com/presentation/d/1uVauwT3Yghn4lvYJiZEm2j3FJy5U2k0Ge870QEr1KGk/)
+
+
 # AI / Machine learning
+## AI / Machine learning
+Great presentation [here](https://towardsdatascience.com/principles-of-artificial-intelligence-machine-learning-122be27d33a4)
+
+# Privacy / Ethics
+## Data Science Ethic Code
+**Start with clear user need and public benefit**
+
+  - If it is to identify an individual, what level of harm could they cause or what would be the benefit of their identification?
+
+**Use data and tools which have the minimum intrusion necessary**
+
+  - How (re-)identifiable is the data?
+  - How much would people care (sensitive)?
+
+**Create robust data science models**
+
+  - Is the data quality high?
+  - How automated are decisions?
+  - What is the risk of someone suffering unintended consequences?
+
+## Data Science Ethic code cont.
+**Be alert to public perceptions**
+
+  - How informed was the consent given (to other data re-uses)?
+  - Any research of how people perceive your problem
+
+**Be open and accountable**
+  - Be open and transparent
+  - Is there oversight for your project?
+  
+**Keep data secure**
+  - How secure is your data?
+  - Who has access and how?
+  - How long is the data stored?
+
+## Data Anonymization / Pseudonymisation
+  - Can you track down the person?
+  - Can a rogue government to has access to all data, combine it to your data in a way that it can track down a person?
+  
+## Web Scrapping Guidance
+  - Respect website terms and conditions and `robots.txt`
+  - Notify website owner about large scale scrappings
+  - Schedule scraping activities so as to minimize the impact on targeted website
+  - Do not scrape anonymously
+  - Ensure intellectual property rights if republishing data
+  
+## Open discussion: Privacy
+
 # API
+## Server-Client Architecture
+## Different ways to call API
+  - HTTP HEADERs
+  - query parameters
+  - prone to errors and changes
 
 
 
